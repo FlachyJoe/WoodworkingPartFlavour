@@ -59,7 +59,7 @@ def panelDefault(iType):
 	
 		info = ""
 		
-		info += translate('panelDefault', '<b>To create default panel, first create active document. </b><br><br><b>Note:</b> This tool creates default panel that can be easily resized. You can clearly see where should be the thickness to keep exact panel XYZ axis orientation. All furniture elements should be created according to the XYZ axis plane, if possible. Avoid building whole furniture with rotated elements. If you want to rotate panel with dowels, better create panel with dowels without rotation, pack panel with dowels into LinkGroup, and use magicAngle to rotate whole LinkGroup. You can rotate whole furniture like this with single click.')
+		info += translate('panelDefault', '<b>To create default panel, first create active document. </b><br><br><b>Note:</b> This tool creates default panel that can be easily resized. You can clearly see where should be the thickness to keep exact panel XYZ axis orientation. All furniture elements should be created according to the XYZ axis plane, if possible. Avoid building whole furniture with rotated elements. If you want to rotate panel with dowels, better create panel with dowels without rotation, pack panel with dowels into Part, and use magicAngle to rotate whole Part. You can rotate whole furniture like this with single click.')
 
 		MagicPanels.showInfo("panelDefault"+iType, info)
 
@@ -474,11 +474,11 @@ def panelMove(iType):
 		for o in selection:
 
 			# allows to move quickly containers
-			# for example whole furniture module or drawer inside LinkGroup
+			# for example whole furniture module or drawer inside Part
 			if (
 			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("PartDesign::Body") or 
-			o.isDerivedFrom("App::LinkGroup") or 
+			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("App::Link") 
 			):
 			
@@ -525,7 +525,7 @@ def panelMove(iType):
 		
 		info = ""
 		
-		info += translate('panelMove', '<b>Please select objects to move. </b><br><br>With the arrows you can quickly move panel with thickness step to solve common furniture problem with thickness offset. If you select PartDesign object, it will be moved with thickness step via Body container. If you select containers <code>App::Part</code>, <code>PartDesign::Body</code>, <code>App::LinkGroup</code> and object <code>App::Link</code>, the move step will be 100, to allow move whole furniture modules or drawers inside container more quickly. Also if the thickness will not be recognized the step will be 100. You can also use the arrows for quick copy. Select object at objects Tree, click <code>CTRL-C</code> and <code>CTRL-V</code> to copy in-place the selected object and use arrows to move the object. <br><br><b>Warning:</b> You can move many objects at once, but make sure the objects have the same thickness to avoid moving objects with different step. If you want precisely move many objects with given step, please use magicMove tool, instead. The arrows recognize the view model rotation. However, all possible rotations are not recognized, sometimes the movement may not be correctly aligned with the arrow icon. So, it is strongly recommended to click fitModel tool before using arrows.')
+		info += translate('panelMove', '<b>Please select objects to move. </b><br><br>With the arrows you can quickly move panel with thickness step to solve common furniture problem with thickness offset. If you select PartDesign object, it will be moved with thickness step via Body container. If you select containers <code>App::Part</code>, <code>PartDesign::Body</code>, <code>App::Part</code> and object <code>App::Link</code>, the move step will be 100, to allow move whole furniture modules or drawers inside container more quickly. Also if the thickness will not be recognized the step will be 100. You can also use the arrows for quick copy. Select object at objects Tree, click <code>CTRL-C</code> and <code>CTRL-V</code> to copy in-place the selected object and use arrows to move the object. <br><br><b>Warning:</b> You can move many objects at once, but make sure the objects have the same thickness to avoid moving objects with different step. If you want precisely move many objects with given step, please use magicMove tool, instead. The arrows recognize the view model rotation. However, all possible rotations are not recognized, sometimes the movement may not be correctly aligned with the arrow icon. So, it is strongly recommended to click fitModel tool before using arrows.')
 		
 		MagicPanels.showInfo("panelMove"+iType, info)
 

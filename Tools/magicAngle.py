@@ -362,7 +362,7 @@ def showQtGUI():
 			
 			# you can add new center points here, if needed
 			
-			if self.gObj.isDerivedFrom("App::LinkGroup"):
+			if self.gObj.isDerivedFrom("App::Part"):
 				
 				self.initRotationPoint(1, 0)
 				self.initRotationPoint(1, 1)

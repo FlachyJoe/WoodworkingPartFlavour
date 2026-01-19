@@ -34,9 +34,9 @@ try:
 			FreeCAD.ActiveDocument.removeObject(part.Name)
 			FreeCAD.ActiveDocument.recompute()
 			
-			# final clean, remove empty LinkGroups
+			# final clean, remove empty Parts
 			for linkgroup in FreeCAD.ActiveDocument.Objects:
-				if linkgroup.isDerivedFrom("App::LinkGroup"):
+				if linkgroup.isDerivedFrom("App::Part"):
 					if linkgroup.ElementList == []:
 						FreeCAD.ActiveDocument.removeObject(linkgroup.Name)
 

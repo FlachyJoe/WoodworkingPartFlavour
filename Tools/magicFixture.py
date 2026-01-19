@@ -536,7 +536,7 @@ def showQtGUI():
 			if self.rb1.isChecked() == True:
 				linkName = "Link_" + str(self.gFixture.Name)
 				link = FreeCAD.activeDocument().addObject('App::Link', linkName)
-				link.setLink(self.gFixture)
+				link.setObjects(self.gFixture)
 				link.Label = "Link, " + self.gFixture.Label + " "
 
 			if self.rb2.isChecked() == True:

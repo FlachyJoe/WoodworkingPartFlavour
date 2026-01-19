@@ -2197,12 +2197,12 @@ FreeCADGui.addCommand("magicSettings", magicSettings())
 
 	
 # ######################################################################################################################
-class selected2LinkGroup():
+class selected2Part():
 
 	def GetResources(self):
-		return {"Pixmap"  : os.path.join(iconPath, "selected2LinkGroup.png"),
-				"MenuText": QT_TRANSLATE_NOOP("selected2LinkGroup", "selected2LinkGroup, to create container"),
-				"ToolTip" : QT_TRANSLATE_NOOP("selected2LinkGroup", "This tool allows you to move selected objects to LinkGroup container."),
+		return {"Pixmap"  : os.path.join(iconPath, "selected2Part.png"),
+				"MenuText": QT_TRANSLATE_NOOP("selected2Part", "selected2Part, to create container"),
+				"ToolTip" : QT_TRANSLATE_NOOP("selected2Part", "This tool allows you to move selected objects to Part container."),
 				"Accel"   : "" }
 
 	def Activated(self):
@@ -2212,7 +2212,7 @@ class selected2LinkGroup():
 
 		modulePath = sys.path
 		
-		module = "selected2LinkGroup"
+		module = "selected2Part"
 		
 		path = os.path.dirname(fakemodule.__file__)
 		path = os.path.join(path, "Tools")
@@ -2232,7 +2232,7 @@ class selected2LinkGroup():
 		# not needed now, maybe in the future
 		return True
 
-FreeCADGui.addCommand("selected2LinkGroup", selected2LinkGroup())
+FreeCADGui.addCommand("selected2Part", selected2Part())
 
 	
 # ######################################################################################################################

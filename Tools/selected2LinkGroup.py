@@ -21,6 +21,6 @@ except:
 	
 	info = ""
 	
-	info += translate('selected2LinkGroup', '<b>Please select objects to create LinkGroup. </b><br><br><b>Note:</b> This tool call FreeCAD LinkGroup command and set color for new LinkGroup objects from first selected object. To select more objects hold left CTRL key during selection.')
+	info += translate('selected2Part', '<b>Please select objects to create Part. </b><br><br><b>Note:</b> This tool call FreeCAD Part command and set color for new Part objects from first selected object. To select more objects hold left CTRL key during selection.')
 
-	MagicPanels.showInfo("selected2LinkGroup", info)
+	MagicPanels.showInfo("selected2Part", info)

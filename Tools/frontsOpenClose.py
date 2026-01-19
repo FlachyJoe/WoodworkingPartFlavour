@@ -13,7 +13,7 @@ def setAttributes(iObj, iRefObjName, iRefEdgeName, iAxis, iAngleStep):
 		iObj.Woodworking_Type = "Front"
 
 	if not hasattr(iObj, "Woodworking_Open"):
-		info = translate("frontsOpenClose", "Allows to skip open simple front inside LinkGroup container and rotate whole LinkGroup container instead.")
+		info = translate("frontsOpenClose", "Allows to skip open simple front inside Part container and rotate whole Part container instead.")
 		iObj.addProperty("App::PropertyBool", "Woodworking_Open", "Woodworking", info)
 		iObj.Woodworking_Open = True
 
@@ -95,10 +95,10 @@ try:
 		
 		parse = True
 		
-		# selected LinkGroup with front and handle inside
+		# selected Part with front and handle inside
 		obs = FreeCADGui.Selection.getSelection()
 		if len(obs) == 2:
-			if obs[0].isDerivedFrom("App::LinkGroup"):
+			if obs[0].isDerivedFrom("App::Part"):
 				
 				o = obs[0]
 				refObjName = str(obs[1].Name)
@@ -143,7 +143,7 @@ except:
 	
 	info = ""
 	
-	info += translate('frontsOpenClose', 'Possible selection methods: <ul><li><b>no selection</b> - allows you to open all fronts. If the objects name starts with "front" or "Front" this front will be open by default via Edge1 to the left side.</li><li><b>edges</b> - you have to select single edge for each front to add open front attributes to each front. This allows you to change default left open to right open.</li><li><b>LinkGroup + edge of simple front inside</b> - allows you to set rotation attributes to LinkGroup container with handle and simple front inside, to rotate whole LinkGroup container with handle but via edge of simple front inside. In this case you must also set attributes to simple front inside but turn off open of the simple front inside to not duplicate rotation.</li></ul><br><br><b>Note:</b> This tool allows you to open and close all cabinet fronts simultaneously. This allows you to quickly view the cabinets internal structure without having to search for each front in the object tree and hide or rotate them individually. The fronts rotate with a default rotation increment of 45 degrees. This allows you to select the front opening angle, from a simple tilt to an open inner front that can open beyond 90 degrees. Rotating the fronts around the Z axis avoids the issue of maximum opening angles for different hinge types. However, the opening of the fronts can be customized by editing the attributes for each front. Opening attributes can also be added to each front using this tool. To select more edges or objects hold left CTRL key during selection.')
+	info += translate('frontsOpenClose', 'Possible selection methods: <ul><li><b>no selection</b> - allows you to open all fronts. If the objects name starts with "front" or "Front" this front will be open by default via Edge1 to the left side.</li><li><b>edges</b> - you have to select single edge for each front to add open front attributes to each front. This allows you to change default left open to right open.</li><li><b>Part + edge of simple front inside</b> - allows you to set rotation attributes to Part container with handle and simple front inside, to rotate whole Part container with handle but via edge of simple front inside. In this case you must also set attributes to simple front inside but turn off open of the simple front inside to not duplicate rotation.</li></ul><br><br><b>Note:</b> This tool allows you to open and close all cabinet fronts simultaneously. This allows you to quickly view the cabinets internal structure without having to search for each front in the object tree and hide or rotate them individually. The fronts rotate with a default rotation increment of 45 degrees. This allows you to select the front opening angle, from a simple tilt to an open inner front that can open beyond 90 degrees. Rotating the fronts around the Z axis avoids the issue of maximum opening angles for different hinge types. However, the opening of the fronts can be customized by editing the attributes for each front. Opening attributes can also be added to each front using this tool. To select more edges or objects hold left CTRL key during selection.')
 
 	MagicPanels.showInfo("frontsOpenClose", info)
 

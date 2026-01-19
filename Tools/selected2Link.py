@@ -13,7 +13,7 @@ try:
 	for o in selectedObjects:
 		[ x, y, z, r ] = MagicPanels.getContainerPlacement(o, "clean")
 		link = FreeCAD.ActiveDocument.addObject('App::Link','Link')
-		link.setLink(o)
+		link.setObjects(o)
 		MagicPanels.setContainerPlacement(link, x, y, z, 0, "clean")
 		FreeCAD.ActiveDocument.recompute()
 		

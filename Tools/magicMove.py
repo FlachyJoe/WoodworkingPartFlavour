@@ -32,7 +32,7 @@ getMenuIndex2 = {
 # add new items only at the end and change self.sMirrorTypeList
 getMenuIndex3 = {
 	translate('magicMove', 'auto'): 0, 
-	translate('magicMove', 'LinkGroup'): 1, 
+	translate('magicMove', 'Part'): 1, 
 	translate('magicMove', 'Clone'): 2 # no comma
 }
 
@@ -212,7 +212,7 @@ def showQtGUI():
 			# not write here, copy text from getMenuIndex3 to avoid typo
 			self.sMirrorTypeList = (
 				translate('magicMove', 'auto'), 
-				translate('magicMove', 'LinkGroup'), 
+				translate('magicMove', 'Part'), 
 				translate('magicMove', 'Clone') # no comma
 			)
 			
@@ -1647,7 +1647,7 @@ def showQtGUI():
 						auto = 2
 					
 				# ############################################################################
-				# mirror using LinkGroup container
+				# mirror using Part container
 				# ############################################################################
 				if self.gMirrorType == 1 or auto == 1:
 					
@@ -1671,8 +1671,8 @@ def showQtGUI():
 			
 					# not create mirror directly at object because 
 					# it will not be managed, extended later
-					# create LinkGroup and move the object to the LinkGroup
-					# and create Mirror at LinkGroup instead
+					# create Part and move the object to the Part
+					# and create Mirror at Part instead
 					if (
 						o.isDerivedFrom("Part::Box") or 
 						o.isDerivedFrom("App::Part") 

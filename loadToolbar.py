@@ -99,7 +99,7 @@ def getItems(iType):
 			"Std_Save",
 			"Std_Open",
 			"Std_MergeProjects",
-			"selected2LinkGroup",
+			"selected2Part",
 			"selected2Link",
 			"selected2Group",
 			"selected2Assembly",

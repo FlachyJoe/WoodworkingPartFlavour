@@ -186,7 +186,7 @@ sTVFDsc = {
 	"on" : translate("getDimensions", "simple mode, not show hidden objects for simple structures"),
 	"edge" : translate("getDimensions", "simple edge mode, show all but not add hidden to the edge size"),
 	"parent" : translate("getDimensions", "simple nesting, inherit visibility from the nearest container"),
-	"screw" : translate("getDimensions", "base screw, to hide base screw inside LinkGroup containers"),
+	"screw" : translate("getDimensions", "base screw, to hide base screw inside Part containers"),
 	"inherit" : translate("getDimensions", "advanced nesting, inherit visibility from the highest container") # no comma
 }
 
@@ -1516,7 +1516,7 @@ def getGroup(iObj, iCaller="getGroup"):
 			except:
 				vGroup = ""
 	
-	# get parent for LinkGroup
+	# get parent for Part
 	if vGroup == "":
 		try:
 			vGroup = iObj.InListRecursive[1].Label
@@ -2958,7 +2958,7 @@ def selectFurniturePart(iObj, iCaller="selectFurniturePart"):
 # ###################################################################################################################
 def setAppPart(iObj, iCaller="setAppPart"):
 
-	# support for LinkGroup on Part
+	# support for Part on Part
 	if iObj.isDerivedFrom("App::Part"):
 
 		try:
@@ -2979,10 +2979,10 @@ def setAppPart(iObj, iCaller="setAppPart"):
 
 
 # ###################################################################################################################
-def setAppLinkGroup(iObj, iCaller="setAppLinkGroup"):
+def setAppPart(iObj, iCaller="setAppPart"):
 
-	# support for LinkGroup
-	if iObj.isDerivedFrom("App::LinkGroup"):
+	# support for Part
+	if iObj.isDerivedFrom("App::Part"):
 
 		try:
 
@@ -2995,7 +2995,7 @@ def setAppLinkGroup(iObj, iCaller="setAppLinkGroup"):
 		except:
 			
 			# if there is wrong structure
-			showError(iCaller, iObj, "setAppLinkGroup", "wrong structure")
+			showError(iCaller, iObj, "setAppPart", "wrong structure")
 			return -1
 	
 	return 0
@@ -3440,7 +3440,7 @@ def getScrewVisibility(iObj, iCaller="getScrewVisibility"):
 		for o in iObj.InListRecursive:
 			
 			if (
-				o.isDerivedFrom("App::LinkGroup") or 
+				o.isDerivedFrom("App::Part") or 
 				o.isDerivedFrom("Part::Compound") or 
 				o.isDerivedFrom("Part::Cut") or 
 				o.isDerivedFrom("App::Part") or 
@@ -3450,8 +3450,8 @@ def getScrewVisibility(iObj, iCaller="getScrewVisibility"):
 				if o.Visibility == False:
 					v = False
 					
-					# first hidden LinkGroup
-					if o.isDerivedFrom("App::LinkGroup"):
+					# first hidden Part
+					if o.isDerivedFrom("App::Part"):
 						return False
 				else:
 					v = True
@@ -3602,7 +3602,7 @@ def scanObjects(iOBs, iCaller="main"):
 			setAppPart(obj)
 			setPartCut(obj)
 			setBody(obj)
-			setAppLinkGroup(obj)
+			setAppPart(obj)
 
 
 # ###################################################################################################################

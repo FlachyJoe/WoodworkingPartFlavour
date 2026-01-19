@@ -123,7 +123,7 @@ Tools = [
 	# #################################################################################################################################
 
 	"magicSettings", "png", "magicSettings, tool for Woodworking workbench settings", "This tool allows you to set default settings for Woodworking workbench.",
-	"selected2LinkGroup", "png", "selected2LinkGroup, to create container", "This tool allows you to move selected objects to LinkGroup container.",
+	"selected2Part", "png", "selected2Part, to create container", "This tool allows you to move selected objects to Part container.",
 	"selected2Link", "png", "selected2Link, to create link to container", "This tool allows you to create link to selected objects.",
 	"selected2Group", "png", "selected2Group, to create folder", "This tool allows you to move selected objects to simple folder.",
 	"selected2Assembly", "png", "selected2Assembly, to export to Assembly", "This tool allows you to convert selected objects to Assembly.",

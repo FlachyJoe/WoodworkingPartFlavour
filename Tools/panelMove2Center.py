@@ -166,7 +166,7 @@ except:
 	info += translate('panelMove2Center', 'Tip') + ":"
 	info += "<ul>"
 	info += "<li>" + translate('panelMove2Center', '<b>Edge, Face, Vertex or Hole edge</b> - can be at the same object or at two different objects but both should lie on one of the coordinate axes XYZ. Because if there would be for example offset at X and Y, this tool would not be able to recognize to which direction center objects.') + "</li>"
-	info += "<li>" + translate('panelMove2Center', '<b>Objects</b> - The object can be Cylinder, Cone (dril bit), Cube (panel), Pad or LinkGroup with as many objects you want. If you want to move Pad, select Body. If you want to move many Pads, select Body or pack all Part into LinkGroup and select LinkGroup to move. Make sure you do not have Sketch position set. This tool use .Shape.CenterOfMass but if it is not available for object like it is for LinkGroup the center will be calculated from vertices. You can move to the center many objects at once. Hold left CTRL key during selection. ') + "</li>"
+	info += "<li>" + translate('panelMove2Center', '<b>Objects</b> - The object can be Cylinder, Cone (dril bit), Cube (panel), Pad or Part with as many objects you want. If you want to move Pad, select Body. If you want to move many Pads, select Body or pack all Part into Part and select Part to move. Make sure you do not have Sketch position set. This tool use .Shape.CenterOfMass but if it is not available for object like it is for Part the center will be calculated from vertices. You can move to the center many objects at once. Hold left CTRL key during selection. ') + "</li>"
 	info += "</ul>"
 	
 	MagicPanels.showInfo("panelMove2Center", info)

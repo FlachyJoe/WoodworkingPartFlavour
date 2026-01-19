@@ -23,7 +23,7 @@ try:
 			# since new color schema if you change Body transparency
 			# the Pad inherits color from Body... 
 			if (
-				o.isDerivedFrom("App::LinkGroup") or 
+				o.isDerivedFrom("App::Part") or 
 				o.isDerivedFrom("App::Link") or 
 				o.isDerivedFrom("App::Part") or 
 				o.isDerivedFrom("PartDesign::Body") or 

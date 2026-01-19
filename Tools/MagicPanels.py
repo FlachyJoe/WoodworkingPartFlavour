@@ -875,7 +875,7 @@ def copyPanel(iObjects, iType="auto"):
 		iObjects: array with objects to copy
 		iType (optional): copy type:
 			* "auto" - if the object is Cube it will be copyObject, otherwise Clone will be used to copy
-			* "copyObject" - force copyObject copy type, however not use at LinkGroup because it will be visible as single object if you remove the copy the base LinkGroup will be removed as well, and the copy will not be visible at cut-list report
+			* "copyObject" - force copyObject copy type, however not use at Part because it will be visible as single object if you remove the copy the base Part will be removed as well, and the copy will not be visible at cut-list report
 			* "Clone" - force Clone copy type, if you make Clone from Pad and the Pad has Sketch.AttachmentOffset the Clone has Placement set to XYZ (0,0,0) but is not in the zero position so you have to remove Sketch offset from the Clone, I guess the BoundBox is the correct solution here
 			* "Link" - force Link copy type, it is faster than Clone but sometimes might be broken
 
@@ -921,7 +921,7 @@ def copyPanel(iObjects, iType="auto"):
 		
 		if iType == "Link":
 			copy = FreeCAD.ActiveDocument.addObject('App::Link', "Link")
-			copy.setLink(o)
+			copy.setObjects(o)
 			copy.Label = str(o.Label)
 			copy.Label = getNestingLabel(o, "Link")
 		
@@ -973,7 +973,7 @@ def getObjectToCopy(iObj):
 		for Pad: always returns Body
 		for PartDesign objects: try to return Body
 		for Body returns Body
-		for LinkGroup: returns LinkGroup
+		for Part: returns Part
 		for Cut: returns Cut
 		for Clones: returns Clone
 		for Links: returns Link
@@ -984,7 +984,7 @@ def getObjectToCopy(iObj):
 
 	if (
 		iObj.isDerivedFrom("Part::Box") or 
-		iObj.isDerivedFrom("App::LinkGroup") or 
+		iObj.isDerivedFrom("App::Part") or 
 		iObj.isDerivedFrom("PartDesign::Body") or 
 		iObj.isDerivedFrom("Part::Cut") 
 		):
@@ -2433,7 +2433,7 @@ def getVerticesPosition(iVertices, iObj, iType="auto"):
 		if (
 			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("PartDesign::Body") or 
-			o.isDerivedFrom("App::LinkGroup") or 
+			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("Part::Cut") 
 			):
 			
@@ -2554,7 +2554,7 @@ def removeVerticesPosition(iVertices, iObj, iType="auto"):
 		if (
 			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("PartDesign::Body") or 
-			o.isDerivedFrom("App::LinkGroup") or 
+			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("Part::Cut") 
 			):
 			
@@ -3109,7 +3109,7 @@ def searchGlobalPosition(iObj):
 	Description:
 	
 		This function search simple objects for global placement. 
-		This can be used in loop for recursive search for more complex objects like LinkGroup or Link.
+		This can be used in loop for recursive search for more complex objects like Part or Link.
 	
 	Args:
 	
@@ -3206,7 +3206,7 @@ def searchGlobalPosition(iObj):
 		if (
 			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("PartDesign::Body") or 
-			o.isDerivedFrom("App::LinkGroup") or 
+			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("Part::Cut") 
 			):
 
@@ -3295,11 +3295,11 @@ def getPosition(iObj, iType="global"):
 	elif iType == "global":
 		
 		# #######################################################
-		# for: LinkGroup, Link or Part
+		# for: Part, Link or Part
 		# #######################################################
 		
 		if (
-			iObj.isDerivedFrom("App::LinkGroup") or 
+			iObj.isDerivedFrom("App::Part") or 
 			iObj.isDerivedFrom("App::Link") or
 			iObj.isDerivedFrom("App::Part")
 			):
@@ -3313,7 +3313,7 @@ def getPosition(iObj, iType="global"):
 			def searchElements(io):
 				global gx, gy, gz, init
 				
-				if io.isDerivedFrom("App::LinkGroup"):
+				if io.isDerivedFrom("App::Part"):
 					target = io.ElementList
 				elif io.isDerivedFrom("App::Link"):
 					target = [ io.LinkedObject ]
@@ -3326,7 +3326,7 @@ def getPosition(iObj, iType="global"):
 				for o in target:
 		
 					if (
-						o.isDerivedFrom("App::LinkGroup") or 
+						o.isDerivedFrom("App::Part") or 
 						o.isDerivedFrom("App::Link") or
 						o.isDerivedFrom("App::Part")
 						):
@@ -3366,7 +3366,7 @@ def getPosition(iObj, iType="global"):
 			if iObj.isDerivedFrom("App::Link"):
 				try:
 					[ gx, gy, gz ] = iObj.Placement.multVec( FreeCAD.Vector(gx, gy, gz) )
-					if iObj.LinkedObject.isDerivedFrom("App::LinkGroup") or iObj.LinkedObject.isDerivedFrom("App::Part"):
+					if iObj.LinkedObject.isDerivedFrom("App::Part") or iObj.LinkedObject.isDerivedFrom("App::Part"):
 						[ gx, gy, gz ] = iObj.LinkedObject.Placement.inverse().multVec( FreeCAD.Vector(gx, gy, gz) )
 				except:
 					skip = 1
@@ -3483,7 +3483,7 @@ def getObjectToMove(iObj):
 		for Cube: always returns Cube
 		for Pad: always returns Body
 		for PartDesign objects: try to return Body
-		for LinkGroup: returns LinkGroup
+		for Part: returns Part
 		for Cut: returns Cut
 		for any other object: returns object
 
@@ -3493,7 +3493,7 @@ def getObjectToMove(iObj):
 		iObj.isDerivedFrom("Part::Box") or 
 		iObj.isDerivedFrom("Part::Cut") or 
 		iObj.isDerivedFrom("PartDesign::Body") or 
-		iObj.isDerivedFrom("App::LinkGroup") 
+		iObj.isDerivedFrom("App::Part") 
 		):
 		return iObj
 
@@ -3519,7 +3519,7 @@ def getObjectCenter(iObj):
 	
 		# > [!NOTE]
 		# > This function will be updated later with more reliable 
-		# > way of getting center of the object, also for LinkGroup and other containers. 
+		# > way of getting center of the object, also for Part and other containers. 
 		# > Now it returns Shape.CenterOfMass for the object and it is not the same 
 		# > as center of the object.
 	
@@ -3625,7 +3625,7 @@ def createContainer(iObjects, iLabel="Container", iNesting=True):
 	Usage:
 	
 		container = MagicPanels.createContainer([c1, c2])
-		container = MagicPanels.createContainer([c1, c2], "LinkGroup")
+		container = MagicPanels.createContainer([c1, c2], "Part")
 		container = MagicPanels.createContainer([o1, o2, o3, o4, o5, o6, o7], "Furniture, Module", False)
 
 	Result:
@@ -3642,8 +3642,8 @@ def createContainer(iObjects, iLabel="Container", iNesting=True):
 		skip = 1
 
 	base = iObjects[0]
-	container = FreeCAD.ActiveDocument.addObject('App::LinkGroup','LinkGroup')
-	container.setLink(iObjects)
+	container = FreeCAD.ActiveDocument.addObject('App::Part','Part')
+	container.setObjects(iObjects)
 	
 	if iNesting == True:
 		container.Label = getNestingLabel(base, iLabel)
@@ -3658,7 +3658,7 @@ def createContainer(iObjects, iLabel="Container", iNesting=True):
 	try:
 		objects = oldcontainer.ElementList
 		objects.append(container)
-		oldcontainer.setLink(objects)
+		oldcontainer.setObjects(objects)
 	except:
 		skip = 1
 	
@@ -3672,7 +3672,7 @@ def getContainersPath(iObj):
 	'''
 	Description:
 	
-		This function returns string with path to object in this way: LinkGroup.Part.Body.Pad
+		This function returns string with path to object in this way: Part.Part.Body.Pad
 		
 	
 	Args:
@@ -3742,7 +3742,7 @@ def getContainers(iObj):
 		if (
 			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("PartDesign::Body") or 
-			o.isDerivedFrom("App::LinkGroup") or 
+			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("Part::Cut") 
 		):
 			containers.append(o)
@@ -3761,20 +3761,20 @@ def moveToContainer(iObjects, iContainer, iType="object"):
 	
 		iObjects: list of objects to move to iContainer, for example new created Cube
 		iContainer: container object or string describing destination level, possible:
-			iContainer: object for example LinkGroup or Pad to search
+			iContainer: object for example Part or Pad to search
 			"object": move all iObjects directly to given iContainer object
 			"parent": move all iObjects to first container above Body, for example Part for given iContainer
-			"LinkGroup": move all iObjects to first LinkGroup container above given iContainer
+			"Part": move all iObjects to first Part container above given iContainer
 
 	Usage:
 
-		For Pad structure: "LinkGroup2 -> LinkGroup1 -> Part -> Body -> Pad"
+		For Pad structure: "Part2 -> Part1 -> Part -> Body -> Pad"
 		and copy object is in root folder. 
 		
-		MagicPanels.moveToContainer([ copy ], LinkGroup2)            # to move copy object to LinkGroup2
-		MagicPanels.moveToContainer([ copy ], LinkGroup2, "object")  # to move copy object to LinkGroup2
+		MagicPanels.moveToContainer([ copy ], Part2)            # to move copy object to Part2
+		MagicPanels.moveToContainer([ copy ], Part2, "object")  # to move copy object to Part2
 		MagicPanels.moveToContainer([ copy ], Pad, "parent")         # to move copy object to Part
-		MagicPanels.moveToContainer([ copy ], Pad, "LinkGroup")      # to move copy object to LinkGroup1
+		MagicPanels.moveToContainer([ copy ], Pad, "Part")      # to move copy object to Part1
 
 	Result:
 
@@ -3798,15 +3798,15 @@ def moveToContainer(iObjects, iContainer, iType="object"):
 				
 				if iType == "parent":
 					if (
-						c.isDerivedFrom("App::LinkGroup") or 
+						c.isDerivedFrom("App::Part") or 
 						c.isDerivedFrom("App::DocumentObjectGroup") or 
 						c.isDerivedFrom("App::Part")
 					):
 						destination = c
 						break
 				
-				if iType == "LinkGroup":
-					if c.isDerivedFrom("App::LinkGroup"):
+				if iType == "Part":
+					if c.isDerivedFrom("App::Part"):
 						destination = c
 						break
 		
@@ -3829,7 +3829,7 @@ def moveToFirst(iObjects, iSelection):
 	'''
 	Description:
 
-		Move objects iObjects to first LinkGroup container for iSelection object.
+		Move objects iObjects to first Part container for iSelection object.
 		
 		# > [!NOTE]
 		# > This function removes the offset that should have been added earlier. Why not just copy without offset?
@@ -3846,7 +3846,7 @@ def moveToFirst(iObjects, iSelection):
 	Args:
 	
 		iObjects: list of objects to move to container, for example [ copy1, copy2 ]
-		iSelection: selected object, for example "PartDesign::Pad" with structure "LinkGroup2 -> LinkGroup1 -> Part -> Body -> Pad" or "Part::Box" in structure "LinkGroup2 -> LinkGroup1 -> panelXY", to move the object to LinkGroup1
+		iSelection: selected object, for example "PartDesign::Pad" with structure "Part2 -> Part1 -> Part -> Body -> Pad" or "Part::Box" in structure "Part2 -> Part1 -> panelXY", to move the object to Part1
 
 	Usage:
 
@@ -3855,7 +3855,7 @@ def moveToFirst(iObjects, iSelection):
 
 	Result:
 
-		No return, move copy object to LinkGroup1 container.
+		No return, move copy object to Part1 container.
 
 	'''
 	
@@ -3875,7 +3875,7 @@ def moveToFirst(iObjects, iSelection):
 		
 		# if there is supported container
 		if (
-			c.isDerivedFrom("App::LinkGroup") or 
+			c.isDerivedFrom("App::Part") or 
 			c.isDerivedFrom("App::DocumentObjectGroup") 
 			):
 		
@@ -3963,7 +3963,7 @@ def getContainersOffset(iObj):
 	'''
 	Description:
 	
-		If the object is in the container like Part, Body, LinkGroup the vertices are 
+		If the object is in the container like Part, Body, Part the vertices are 
 		not updated by FreeCAD. From FreeCAD perspective the object is still in the 
 		same place. This function is trying to solve this problem and calculates 
 		all offsets of all containers.
@@ -4000,7 +4000,7 @@ def getContainersOffset(iObj):
 		if (
 			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("PartDesign::Body") or 
-			o.isDerivedFrom("App::LinkGroup") or 
+			o.isDerivedFrom("App::Part") or 
 			o.isDerivedFrom("Part::Cut") 
 			):
 			
@@ -4069,7 +4069,7 @@ def isVisible(iObj):
 	'''
 	Description:
 	
-		Returns object visibility, even if object is visible but inside the hidden LinkGroup container.
+		Returns object visibility, even if object is visible but inside the hidden Part container.
 		
 	Args:
 	
@@ -5596,7 +5596,7 @@ def getColor(iObj, iFaceIndex, iAttribute="color", iType="kernel"):
 		else:
 			attribute = iAttribute
 		
-		# for example LinkGroup
+		# for example Part
 		if returnColor == "":
 			if not hasattr(iObj.ViewObject, "ShapeAppearance"):
 				if hasattr(iObj.ViewObject, "ShapeMaterial"):
@@ -5646,7 +5646,7 @@ def getColor(iObj, iFaceIndex, iAttribute="color", iType="kernel"):
 		else:
 			return "not supported attribute in this version"
 		
-		# for example LinkGroup
+		# for example Part
 		if returnColor == "":
 			if not hasattr(iObj.ViewObject, "DiffuseColor"):
 				if hasattr(iObj.ViewObject, "ShapeMaterial"):
@@ -5793,7 +5793,7 @@ def setColor(iObj, iFaceIndex, iColor, iAttribute="color", iType="kernel"):
 		else:
 			attribute = iAttribute
 
-		# for example LinkGroup
+		# for example Part
 		if not hasattr(iObj.ViewObject, "ShapeAppearance"):
 			if hasattr(iObj.ViewObject, "ShapeMaterial"):
 				if hasattr(iObj.ViewObject.ShapeMaterial, attribute):
@@ -5907,7 +5907,7 @@ def setColor(iObj, iFaceIndex, iColor, iAttribute="color", iType="kernel"):
 			iObj.ViewObject.DiffuseColor = initSA
 			return ""
 
-		# for example LinkGroup
+		# for example Part
 		if not hasattr(iObj.ViewObject, "DiffuseColor"):
 			if hasattr(iObj.ViewObject, "ShapeMaterial"):
 				if hasattr(iObj.ViewObject.ShapeMaterial, attribute):
@@ -6783,11 +6783,11 @@ def makeCutsLinks(iObjects):
 
 	for o in objects:
 
-		if not o.isDerivedFrom("App::LinkGroup"):
+		if not o.isDerivedFrom("App::Part"):
 			o = createContainer([o])
 
 		copy = FreeCAD.ActiveDocument.addObject('App::Link', "Link")
-		copy.setLink(o)
+		copy.setObjects(o)
 		copy.Label = getNestingLabel(o, "Copy")
 
 		if not hasattr(copy, "BOM"):
@@ -8116,7 +8116,7 @@ def showInfo(iCaller, iInfo, iNote="yes"):
 	info += "<ul>"
 	
 	info += "<li>"
-	info += translate('showInfoAll','Not rotate objects directly, rotate them via LinkGroup container.')
+	info += translate('showInfoAll','Not rotate objects directly, rotate them via Part container.')
 	info += "</li>"
 	info += "<li>"
 	info += translate('showInfoAll','Not copy Pad directly. Copy, Clone or Link the Part container.')
@@ -8128,7 +8128,7 @@ def showInfo(iCaller, iInfo, iNote="yes"):
 	info += translate('showInfoAll','If you want generate cut-list, BOM, dimensions, rather avoid packing objects extremely, for example Array on Array or MultiTransform on MultiTransform.')
 	info += "</li>"
 	info += "<li>"
-	info += translate('showInfoAll','Not move objects via AttachmentOffset, move them via Body or LinkGroup container.')
+	info += translate('showInfoAll','Not move objects via AttachmentOffset, move them via Body or Part container.')
 	info += "</li>"
 	info += "<li>"
 	info += translate('showInfoAll','Design furniture from simple panels (Part::Box objects). If you want more detailed model convert desired simple panel into Pad and edit the Sketch. Also for irregular or not rectangle shapes.')
@@ -8206,8 +8206,8 @@ def moveToParent(iObjects, iSelection):
 	Description:
 	
 		This version move object to parent container without adding or remove offset. This is useful if you copy the 
-		Sketch, because Sketch after copy is located outside Body, in Part. But if the Part is inside LinkGroup 
-		the copied Sketch will be located outside LinkGroup, in main root folder. This is problematic because 
+		Sketch, because Sketch after copy is located outside Body, in Part. But if the Part is inside Part 
+		the copied Sketch will be located outside Part, in main root folder. This is problematic because 
 		the Sketch after copy has offset from containers. The object to move need to be in root folder to avoid 
 		duplicated already copied objects, Cube.
 	
@@ -8242,8 +8242,8 @@ def moveToParent(iObjects, iSelection):
 
 		for o in iObjects:
 
-			# skip move Link of LinkGroup to the same LinkGroup
-			if iSelection.isDerivedFrom("App::LinkGroup") or iSelection.isDerivedFrom("App::Link"):
+			# skip move Link of Part to the same Part
+			if iSelection.isDerivedFrom("App::Part") or iSelection.isDerivedFrom("App::Link"):
 				if o.isDerivedFrom("App::Link"):
 					continue
 
@@ -8271,12 +8271,12 @@ def moveToClean(iObjects, iSelection):
 	Description:
 	
 		Move objects iObjects to clean container for iSelection object.
-		Container need to be in the clean path, no other objects except Group or LinkGroup, 
+		Container need to be in the clean path, no other objects except Group or Part, 
 
 		For example:
 
-		clean path: LinkGroup -> LinkGroup
-		not clean: Mirror -> LinkGroup
+		clean path: Part -> Part
+		not clean: Mirror -> Part
 	
 	Args:
 	
@@ -8316,7 +8316,7 @@ def moveToClean(iObjects, iSelection):
 			
 			# if there is supported container
 			if (
-				c.isDerivedFrom("App::LinkGroup") or 
+				c.isDerivedFrom("App::Part") or 
 				c.isDerivedFrom("App::DocumentObjectGroup") 
 				):
 			
@@ -8370,9 +8370,9 @@ def moveToFirstWithInverse(iObjects, iSelection):
 	Description:
 	
 		This version remove the placement and rotation offset from iObjects and move the iObjects to first 
-		supported container (LinkGroup). 
+		supported container (Part). 
 		
-		Note: It is dedicated to move panel created from vertices to the first LinkGroup container. 
+		Note: It is dedicated to move panel created from vertices to the first Part container. 
 		The object created from vertices have applied offset with rotation after creation 
 		but is outside the container. So if you move it manually it will be in the wrong place because 
 		container apply the placement and rotation again. So, you have to remove the offset and move it. 
@@ -8407,7 +8407,7 @@ def moveToFirstWithInverse(iObjects, iSelection):
 
 		c = containers[i]
 
-		if c.isDerivedFrom("App::LinkGroup"):
+		if c.isDerivedFrom("App::Part"):
 			try:
 				p = c.Placement
 				if toRemove == "":
@@ -8425,7 +8425,7 @@ def moveToFirstWithInverse(iObjects, iSelection):
 		
 		c = containers[i]
 
-		if c.isDerivedFrom("App::LinkGroup"):
+		if c.isDerivedFrom("App::Part"):
 			for o in iObjects:
 					
 				o.Placement = o.Placement * toRemove
@@ -8502,7 +8502,7 @@ def getPlacement(iObj, iType="clean"):
 		iObj: object to get placement
 		iType: 
 			* "clean" - old way good for simple objects but it not works if the object has AttachmentOffset set or there are multiple Pads and only the first one has AttachmentOffset set
-			* "BoundBox" - return [ XMin, YMin, ZMin ] from object BoundBox, this way solves the problem with AttachmentOffset but you need to be careful, but if the object has containers offset, for example Placement set at Part, Body or LinkGroups additionally you have to add the containers offset, also there will be problem with additional rotation
+			* "BoundBox" - return [ XMin, YMin, ZMin ] from object BoundBox, this way solves the problem with AttachmentOffset but you need to be careful, but if the object has containers offset, for example Placement set at Part, Body or Parts additionally you have to add the containers offset, also there will be problem with additional rotation
 
 	Usage:
 	
@@ -8936,7 +8936,7 @@ def getContainerPlacement(iObj, iType="clean"):
 		
 		if objRef.isDerivedFrom("PartDesign::Pad"):
 			
-			# FreeCAD getGlobalPlacement for Sketch not returns LinkGroup offset
+			# FreeCAD getGlobalPlacement for Sketch not returns Part offset
 			# so you have to get clean placement and add all offsets on your own
 			[ x, y, z, r ] = getSketchPlacement(objRef.Profile[0], "clean")
 			
@@ -8981,7 +8981,7 @@ def setContainerPlacement(iObj, iX, iY, iZ, iR, iAnchor="normal"):
 	
 	Args:
 
-		iObj: object or container to set placement, for example Body, LinkGroup, Cut, Pad, Cube, Sketch, Cylinder
+		iObj: object or container to set placement, for example Body, Part, Cut, Pad, Cube, Sketch, Cylinder
 		iX: X Axis object position
 		iY: Y Axis object position
 		iZ: Z Axis object position
