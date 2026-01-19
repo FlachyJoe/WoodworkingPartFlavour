@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
-  <name>Woodworking</name>
+  <name>WoodworkingPartFlavour</name>
   <description>Woodworking workbench was designed primarily for creating simple cabinets for your home or garage. However, it includes many features that will make everyday carpentry and other CAD projects easier and faster. I hope you will find something you enjoy here.</description>
-  
-  <!-- 
+
+  <!--
   Syntax: 2.1.20251120
   2 - release, stable, tested, and published on GitHub
   1 - first patch for 2.0 release, should be stable and tested, not published on GitHub
   20251120 - important and stable commit date only, triggers Add-on Manager update
   -->
   <version>2.2.20260117</version>
-  
+
   <!--
   this date below is used by Woodworking workbench tools for update
   -->
   <date>2026-01-17</date>
-  
+
   <author email="github.com/dprojects">Darek L</author>
   <maintainer email="github.com/dprojects/Woodworking/issues">Darek L</maintainer>
   <url type="website">https://github.com/dprojects</url>
